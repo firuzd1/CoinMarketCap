@@ -1,11 +1,11 @@
 ﻿namespace CoinMarketCap.Providers
 {
-    public class CoinMarketCapService
+    public class CoinMarketCapProvider
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public CoinMarketCapService(HttpClient httpClient)
+        public CoinMarketCapProvider(HttpClient httpClient)
         {
             _httpClient = httpClient;
 
@@ -16,8 +16,17 @@
 
         public async Task<string> GetCryptocurrencyQuoteAsync(CancellationToken token = default)
         {
-            string key = _apiKey;
-            return key;
+            
+            var requestUrl = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            request.Headers.Add("X-CMC_PRO_API_KEY", _apiKey);
+
+            var response = await _httpClient.SendAsync(request, token);
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync(token);
+            return content;
         }
     }
 }

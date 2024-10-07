@@ -1,4 +1,6 @@
-using CoinMarketCap.Providers;
+using CoinMarketCap.Dtos;
+using CoinMarketCap.Models;
+using CoinMarketCap.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +8,7 @@ namespace CoinMarketCap.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:ApiVersion}/WeatherForecast")]
+    [Route("api/v{version:ApiVersion}/CoinMarketCap")]
     public class CoinMarketCapController : ControllerBase
     {
        private CoinMarketCapService _service;
@@ -16,10 +18,8 @@ namespace CoinMarketCap.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<string> Get() 
-        {
-            return await _service.GetCryptocurrencyQuoteAsync();
-        }
+        [HttpGet("update-cryptocurrency-database")]
+        public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(CancellationToken token = default) 
+            => await _service.UpdateCryptocurrencyQuoteBaseAsync(token);
     }
 }

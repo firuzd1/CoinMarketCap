@@ -5,6 +5,10 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using DotNetEnv;
 using CoinMarketCap.Providers;
+using CoinMarketCap.Services;
+using CoinMarketCap.Factories;
+using CoinMarketCap.Interfaces;
+using CoinMarketCap.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,9 +50,16 @@ builder.Services.AddAuthentication(option =>
 // Add services to the container.
 builder.Services.AddControllers();
 
-
 //services
+builder.Services.AddScoped<CoinMarketCapProvider>();
 builder.Services.AddScoped<CoinMarketCapService>();
+
+//repositories
+builder.Services.AddScoped<CoinMarketCapRepository>();
+
+//DbConnection
+builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
+          new NpgsqlConnectionFactory(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
 
 //Other
 builder.Services.AddHttpClient();
