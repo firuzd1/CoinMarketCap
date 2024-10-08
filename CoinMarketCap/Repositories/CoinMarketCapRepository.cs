@@ -2,6 +2,7 @@
 using CoinMarketCap.Interfaces;
 using CoinMarketCap.Models;
 using Dapper;
+using Npgsql;
 using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -72,8 +73,93 @@ namespace CoinMarketCap.Repositories
         {
             using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
-            var deleteQuery = "DELETE FROM cryptocurrency_json;";
+            var deleteQuery = @"DELETE FROM public.cryptocurrency;
+                                ALTER SEQUENCE cryptocurrency_id_seq RESTART WITH 1;";
             return await conn.ExecuteAsync(deleteQuery);
         }
-    } 
+        public async Task<bool> HasDataAsync(CancellationToken token = default)
+        {
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+
+            var sql = "SELECT EXISTS(SELECT 1 FROM cryptocurrency);";
+
+            return await conn.ExecuteScalarAsync<bool>(new CommandDefinition(sql, cancellationToken: token));
+        }
+
+        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, int itemofPage, CancellationToken token = default)
+        {
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+
+            var sql = @"
+            SELECT 
+                name AS Name, 
+                symbol AS Symbol, 
+                slug AS Slug, 
+                num_market_pairs AS NumMarketPairs, 
+                date_added AS DateAdded, 
+                max_supply AS MaxSupply, 
+                circulating_supply AS CirculatingSupply, 
+                total_supply AS TotalSupply, 
+                cmc_rank AS CmcRank,
+                price AS Price, 
+                volume_24h AS Volume24h, 
+                volume_change_24h AS VolumeChange24h, 
+                percent_change_1h AS PercentChange1h, 
+                percent_change_24h AS PercentChange24h, 
+                percent_change_7d AS PercentChange7d, 
+                percent_change_30d AS PercentChange30d, 
+                percent_change_60d AS PercentChange60d, 
+                percent_change_90d AS PercentChange90d, 
+                market_cap AS MarketCap, 
+                market_cap_dominance AS MarketCapDominance, 
+                fully_diluted_market_cap AS FullyDilutedMarketCap
+            FROM cryptocurrency
+                     OFFSET @Page LIMIT @ItemsOfPage";
+
+            var cryptocurrencies = await conn.QueryAsync<CryptocurrencyData, QuoteUSD, CryptocurrencyData>(
+                new CommandDefinition(sql, new { Page = page, ItemsOfPage = itemofPage }, cancellationToken: token), 
+                (crypto, quote) =>
+                {
+                    crypto.Quote = new Quote { USD = quote };
+                    return crypto;
+                },
+                splitOn: "Price"
+            );
+
+            return cryptocurrencies.ToList();
+        }
+
+        public async Task<int> AddCryptoMetadataAsync(CryptocurrencyMetaDataResponse cryptocurrencyResponse, CancellationToken token = default)
+        {
+            int res = 0;
+            foreach (var item in cryptocurrencyResponse.Data)
+            {
+                var cryptocurrency = item.Value;
+
+                const string sql = @"
+            INSERT INTO crypto_metadata (coin_market_cap_id, name, symbol, category, description, slug, logo, subreddit, date_added, infinite_supply, platform_name, platform_slug)
+            VALUES (@CoinMarketCapId, @Name, @Symbol, @Category, @Description, @Slug, @Logo, @Subreddit, @DateAdded, @InfiniteSupply, @PlatformName, @PlatformSlug);";
+
+                using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+                {
+                    res = await conn.ExecuteAsync(sql, new
+                    {
+                        CoinMarketCapId = cryptocurrency.CoinMarketCapId.ToString(),
+                        Name = cryptocurrency.Name,
+                        Symbol = cryptocurrency.Symbol,
+                        Category = cryptocurrency.Category,
+                        Description = cryptocurrency.Description,
+                        Slug = cryptocurrency.Slug,
+                        Logo = cryptocurrency.Logo,
+                        Subreddit = cryptocurrency.Subreddit,
+                        DateAdded = cryptocurrency.DateAdded,
+                        InfiniteSupply = cryptocurrency.InfiniteSupply,
+                        PlatformName = cryptocurrency.Platform?.Name,
+                        PlatformSlug = cryptocurrency.Platform?.Slug
+                    });
+                }
+            }
+            return res;
+        }
+    }
 }

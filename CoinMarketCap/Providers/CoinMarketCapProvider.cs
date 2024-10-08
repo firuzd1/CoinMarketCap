@@ -28,5 +28,25 @@
             var content = await response.Content.ReadAsStringAsync(token);
             return content;
         }
+
+        public async Task<string> GetMetadataAsync(string symbol, CancellationToken token = default)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("X-CMC_PRO_API_KEY", _apiKey);
+            var endpoint = $"https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?symbol={symbol}";
+            string response1;
+
+            var response = await client.GetAsync(endpoint, token);
+
+            if (response.IsSuccessStatusCode)
+            {
+               response1 =  await response.Content.ReadAsStringAsync();
+                return response1;
+            }
+            else
+            {
+                throw new Exception("Failed to retrieve metadata from CoinMarketCap.");
+            }
+        }
     }
 }

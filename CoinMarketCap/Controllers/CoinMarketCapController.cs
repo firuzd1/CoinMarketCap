@@ -21,5 +21,13 @@ namespace CoinMarketCap.Controllers
         [HttpGet("update-cryptocurrency-database")]
         public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(CancellationToken token = default) 
             => await _service.UpdateCryptocurrencyQuoteBaseAsync(token);
+
+        [HttpGet("get-cryptocurrencies")]
+        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page = 1, CancellationToken token = default)
+            => await _service.GetAllCryptocurrenciesAsync(page, token);
+
+        [HttpGet("get-metadata")]
+        public async Task<string> GetMetadataAsync(string symbol, CancellationToken token = default)
+            => await _service.GetMetadataAsync(symbol, token);
     }
 }
