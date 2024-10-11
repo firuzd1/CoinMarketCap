@@ -9,6 +9,10 @@ using CoinMarketCap.Services;
 using CoinMarketCap.Factories;
 using CoinMarketCap.Interfaces;
 using CoinMarketCap.Repositories;
+using FluentValidation;
+using CoinMarketCap.Helpers;
+using CoinMarketCap.Dtos;
+using CoinMarketCap.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,16 +57,25 @@ builder.Services.AddControllers();
 //services
 builder.Services.AddScoped<CoinMarketCapProvider>();
 builder.Services.AddScoped<CoinMarketCapService>();
+builder.Services.AddScoped<UserService>();
 
 //repositories
 builder.Services.AddScoped<CoinMarketCapRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 //DbConnection
 builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
           new NpgsqlConnectionFactory(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
 
+//Validators
+builder.Services.AddScoped<IValidator<UserDto>, UserValidatorFL>();
+
+// Add All FluentValidators
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
 //Other
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<FunctionsHelper>();
 
 
 

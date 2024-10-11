@@ -1,5 +1,6 @@
 using CoinMarketCap.Dtos;
 using CoinMarketCap.Models;
+using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace CoinMarketCap.Controllers
             => await _service.GetAllCryptocurrenciesAsync(page, token);
 
         [HttpGet("get-metadata")]
-        public async Task<string> GetMetadataAsync(string symbol, CancellationToken token = default)
+        public async Task<CryptocurrencyMetaData?> GetMetadataAsync(CoinSymbols symbol, CancellationToken token = default)
             => await _service.GetMetadataAsync(symbol, token);
     }
 }

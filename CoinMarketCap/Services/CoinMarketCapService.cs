@@ -1,5 +1,6 @@
 ﻿using CoinMarketCap.Dtos;
 using CoinMarketCap.Models;
+using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Providers;
 using CoinMarketCap.Repositories;
 using Microsoft.AspNetCore.Builder.Extensions;
@@ -28,9 +29,6 @@ namespace CoinMarketCap.Services
 
             CryptocurrencyResponse? response = JsonSerializer.Deserialize<CryptocurrencyResponse>(stringResponse);
 
-            if(await _repository.HasDataAsync(token))
-                await _repository.ClearCryptocurrencyTable(token);
-            
             int result = await _repository.CryptocurrencyQuoteAddAsync(response, token);
             
             if(result <= 0) 
@@ -44,13 +42,26 @@ namespace CoinMarketCap.Services
             return _response;
         }
 
-        public async Task<string> GetMetadataAsync(string symbol, CancellationToken token = default)
+        public async Task<CryptocurrencyMetaData?> GetMetadataAsync(CoinSymbols symbol, CancellationToken token = default)
         {
-            string metadata = await _provider.GetMetadataAsync(symbol, token);
+            ApiResponse _response = new();
+            _response.Code = ApiErrorCodes.FailedCode;
 
-            CryptocurrencyMetaDataResponse? response = JsonSerializer.Deserialize<CryptocurrencyMetaDataResponse>(metadata);
-            int repResponse = await _repository.AddCryptoMetadataAsync(response, token);
-            return metadata;
+            CryptocurrencyMetaData? metaData = await _repository.GetMetaDataFromDbAsync(symbol.ToString(), token);
+            if(metaData == null)
+            {
+                string metadata = await _provider.GetMetadataAsync(symbol.ToString(), token);
+
+                CryptocurrencyMetaDataResponse? response = JsonSerializer.Deserialize<CryptocurrencyMetaDataResponse>(metadata);
+                int repResponse = await _repository.AddCryptoMetadataAsync(response, token);
+
+                if (repResponse > 0)
+                {
+                   return await _repository.GetMetaDataFromDbAsync(symbol.ToString(), token);
+                    
+                }
+            }
+            return metaData;
         }
 
         public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, CancellationToken token = default)

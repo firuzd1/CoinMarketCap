@@ -4,6 +4,7 @@ using CoinMarketCap.Models;
 using Dapper;
 using Npgsql;
 using System.Data;
+using System.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CoinMarketCap.Repositories
@@ -62,28 +63,10 @@ namespace CoinMarketCap.Repositories
                     FullyDilutedMarketCap = quoteUSD.FullyDilutedMarketCap
                 };
 
-                // Выполняем запрос для каждой записи
                 await conn.ExecuteAsync(new CommandDefinition(sql, parameters, cancellationToken: token));
             }
 
-            return response.Data.Count; // Возвращаем количество добавленных записей
-        }
-
-        public async Task<int> ClearCryptocurrencyTable(CancellationToken token = default)
-        {
-            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
-
-            var deleteQuery = @"DELETE FROM public.cryptocurrency;
-                                ALTER SEQUENCE cryptocurrency_id_seq RESTART WITH 1;";
-            return await conn.ExecuteAsync(deleteQuery);
-        }
-        public async Task<bool> HasDataAsync(CancellationToken token = default)
-        {
-            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
-
-            var sql = "SELECT EXISTS(SELECT 1 FROM cryptocurrency);";
-
-            return await conn.ExecuteScalarAsync<bool>(new CommandDefinition(sql, cancellationToken: token));
+            return response.Data.Count;
         }
 
         public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, int itemofPage, CancellationToken token = default)
@@ -160,6 +143,20 @@ namespace CoinMarketCap.Repositories
                 }
             }
             return res;
+        }
+
+        public async Task<CryptocurrencyMetaData?> GetMetaDataFromDbAsync(string symbol, CancellationToken token = default)
+        {
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+
+
+            string query = @"SELECT id, coin_market_cap_id, name, symbol, category, description, 
+                                slug, logo, subreddit, date_added, infinite_supply, platform_name, platform_slug
+	                            FROM public.crypto_metadata
+                            WHERE symbol = @Symbol"
+            ;
+
+            return await conn.QueryFirstOrDefaultAsync<CryptocurrencyMetaData>(new CommandDefinition(query, new {Symbol = symbol}, cancellationToken : token));
         }
     }
 }
