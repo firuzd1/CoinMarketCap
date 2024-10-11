@@ -1,6 +1,7 @@
 ﻿using CoinMarketCap.Interfaces;
 using CoinMarketCap.Models;
 using Dapper;
+using System.Data;
 
 namespace CoinMarketCap.Repositories
 {
@@ -16,7 +17,7 @@ namespace CoinMarketCap.Repositories
         {
             int insertedUserId = 0;
 
-            using var conn = await _db.CreateConnectionAsync(token);
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
             const string query = @"INSERT INTO public.user (login, password) 
                                     VALUES (@Login, @Password) RETURNING id ";
@@ -24,6 +25,22 @@ namespace CoinMarketCap.Repositories
             insertedUserId = await conn.QueryFirstOrDefaultAsync<int>(new CommandDefinition(query, user, cancellationToken: token));
             
             return insertedUserId;
+        }
+
+        public async Task<UserModel?> GetUserByLoginAndPasswordAsync(string login, string password, CancellationToken token = default)
+        {
+            UserModel? user = null;
+
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+
+            string query = @"SELECT login as Login, password AS Password
+                            FROM ""user""
+                            WHERE login = @Login AND password = @Password";
+
+            user = await conn.QueryFirstOrDefaultAsync<UserModel>(new CommandDefinition(query, new { Login = login, Password = password }, cancellationToken: token));
+      
+
+            return user;
         }
     }
 }

@@ -58,10 +58,12 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<CoinMarketCapProvider>();
 builder.Services.AddScoped<CoinMarketCapService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IdentityService>();
 
 //repositories
 builder.Services.AddScoped<CoinMarketCapRepository>();
 builder.Services.AddScoped<UserRepository>();
+
 
 //DbConnection
 builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
@@ -69,6 +71,7 @@ builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
 
 //Validators
 builder.Services.AddScoped<IValidator<UserDto>, UserValidatorFL>();
+builder.Services.AddScoped<UserValidator>();
 
 // Add All FluentValidators
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);

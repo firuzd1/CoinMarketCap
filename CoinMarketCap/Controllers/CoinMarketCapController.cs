@@ -28,6 +28,7 @@ namespace CoinMarketCap.Controllers
             => await _service.GetAllCryptocurrenciesAsync(page, token);
 
         [HttpGet("get-metadata")]
+        [Authorize]
         public async Task<CryptocurrencyMetaData?> GetMetadataAsync(CoinSymbols symbol, CancellationToken token = default)
             => await _service.GetMetadataAsync(symbol, token);
     }
