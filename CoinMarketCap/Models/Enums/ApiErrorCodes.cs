@@ -1,4 +1,4 @@
-﻿namespace PowerBankSystem.Models.Enums
+﻿namespace CoinMarketCap.Models.Enums
 {
     public enum ApiErrorCodes
     {

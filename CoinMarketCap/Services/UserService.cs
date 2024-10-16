@@ -2,8 +2,8 @@
 using CoinMarketCap.Helpers;
 using CoinMarketCap.Models;
 using CoinMarketCap.Repositories;
-using PowerBankSystem.Models.Enums;
-using PowerBankSystem.Models;
+using CoinMarketCap.Models.Enums;
+using CoinMarketCap.Models;
 using CoinMarketCap.Mappers;
 using FluentValidation;
 

@@ -13,6 +13,8 @@ using FluentValidation;
 using CoinMarketCap.Helpers;
 using CoinMarketCap.Dtos;
 using CoinMarketCap.Validators;
+using log4net.Config;
+using CoinMarketCap.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,10 +61,12 @@ builder.Services.AddScoped<CoinMarketCapProvider>();
 builder.Services.AddScoped<CoinMarketCapService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IdentityService>();
+builder.Services.AddScoped<TransactionService>();
 
 //repositories
 builder.Services.AddScoped<CoinMarketCapRepository>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<TransactionRepository>();
 
 
 //DbConnection
@@ -146,6 +150,8 @@ builder.Services.AddVersionedApiExplorer(setup =>
 
 var app = builder.Build();
 
+XmlConfigurator.Configure(new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config")));
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -159,6 +165,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();

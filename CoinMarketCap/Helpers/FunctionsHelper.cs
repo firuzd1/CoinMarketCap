@@ -26,36 +26,5 @@ namespace CoinMarketCap.Helpers
             }
             return sBuilder.ToString();
         }
-
-        public string GenerateUniqueLoginId()
-        {
-            Random random = new Random();
-            int min = 100000;
-            int max = 999999;
-
-            int randomNumber = random.Next(min, max + 1);
-
-            return randomNumber.ToString();
-        }
-
-        public string ComputeMd5Hash()
-        {
-            string hashText = "GrEen" + DateTime.Now.ToString("yyyyddMMHH-mmssfff") + "PoWer";
-            // Use input string to calculate MD5 hash
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] inputBytes = Encoding.UTF8.GetBytes(hashText);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                // Convert the byte array to a hexadecimal string
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("x2"));
-                }
-
-                return sb.ToString();
-            }
-        }
     }
 }

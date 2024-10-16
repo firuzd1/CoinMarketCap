@@ -1,4 +1,4 @@
-﻿namespace PowerBankSystem.Models
+﻿namespace CoinMarketCap.Models
 {
     public class Param
     {

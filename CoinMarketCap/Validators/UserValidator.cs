@@ -1,7 +1,7 @@
 ﻿using CoinMarketCap.Dtos;
 using CoinMarketCap.Helpers;
 using CoinMarketCap.Models;
-using PowerBankSystem.Models.Enums;
+using CoinMarketCap.Models.Enums;
 using System.Text.RegularExpressions;
 
 namespace CoinMarketCap.Validators

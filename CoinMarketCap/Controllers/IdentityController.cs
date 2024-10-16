@@ -27,27 +27,6 @@ namespace CoinMarketCap.Controllers
             _response = await _identityService.GenerationToken(userLogin);
             return _response;
 
-            //// Проверка учетных данных (пример проверки)
-            //if (userLogin.Login == "test" && userLogin.Password == "password")
-            //{
-            //    // Генерация токена
-            //    var tokenHandler = new JwtSecurityTokenHandler();
-            //    var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-            //    var tokenDescriptor = new SecurityTokenDescriptor
-            //    {
-            //        Subject = new ClaimsIdentity(new[] { new Claim("id", "1") }),
-            //        Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"])),
-            //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            //        Issuer = _configuration["Jwt:Issuer"],
-            //        Audience = _configuration["Jwt:Audience"]
-            //    };
-            //    var token = tokenHandler.CreateToken(tokenDescriptor);
-            //    var tokenString = tokenHandler.WriteToken(token);
-
-            //    return Ok(new { Token = tokenString });
-            //}
-
-            //return Unauthorized();
         }
     }
 }

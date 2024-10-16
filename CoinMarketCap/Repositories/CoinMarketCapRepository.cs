@@ -150,8 +150,8 @@ namespace CoinMarketCap.Repositories
             using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
 
-            string query = @"SELECT id, coin_market_cap_id, name, symbol, category, description, 
-                                slug, logo, subreddit, date_added, infinite_supply, platform_name, platform_slug
+            string query = @"SELECT id AS DbId, coin_market_cap_id AS CoinMarketCapId, name AS Name, symbol AS Symbol, category AS Category, description AS Description, 
+                                slug AS Slug, logo AS Logo, subreddit AS Subreddit, date_added AS DateAdded, infinite_supply AS InfiniteSupply, platform_name, platform_slug
 	                            FROM public.crypto_metadata
                             WHERE symbol = @Symbol"
             ;

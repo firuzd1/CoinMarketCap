@@ -10,6 +10,7 @@ public class CryptocurrencyMetaDataResponse
 
 public class CryptocurrencyMetaData
 {
+    public int DbId { get; set; }
 
     [JsonPropertyName("id")]
     public int CoinMarketCapId { get; set; }

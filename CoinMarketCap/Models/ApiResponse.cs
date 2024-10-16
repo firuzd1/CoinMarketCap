@@ -1,5 +1,5 @@
-﻿using PowerBankSystem.Models;
-using PowerBankSystem.Models.Enums;
+﻿using CoinMarketCap.Models;
+using CoinMarketCap.Models.Enums;
 
 namespace CoinMarketCap.Models
 {

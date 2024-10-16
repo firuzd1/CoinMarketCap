@@ -4,7 +4,7 @@ using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Providers;
 using CoinMarketCap.Repositories;
 using Microsoft.AspNetCore.Builder.Extensions;
-using PowerBankSystem.Models.Enums;
+using CoinMarketCap.Models.Enums;
 using System.Text.Json;
 
 namespace CoinMarketCap.Services
