@@ -6,6 +6,7 @@ using CoinMarketCap.Repositories;
 using Microsoft.AspNetCore.Builder.Extensions;
 using CoinMarketCap.Models.Enums;
 using System.Text.Json;
+using CoinMarketCap.Helpers;
 
 namespace CoinMarketCap.Services
 {
@@ -20,8 +21,9 @@ namespace CoinMarketCap.Services
             _provider = provider;
         }
 
-        public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(CancellationToken token = default)
+        public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(Lang lang, CancellationToken token = default)
         {
+            Comment comment = new(lang);
             ApiResponse _response = new();
             _response.Code = ApiErrorCodes.FailedCode;
 
@@ -33,12 +35,12 @@ namespace CoinMarketCap.Services
             
             if(result <= 0) 
             {
-                _response.Comment = "не удалось добавить запись в базу";
+                _response.Comment = comment.FailedRecordToDb;
                 return _response;
             }
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = "success";
+            _response.Comment = comment.Success;
             return _response;
         }
 

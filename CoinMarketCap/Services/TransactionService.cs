@@ -5,6 +5,7 @@ using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Repositories;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CoinMarketCap.Models.Enums;
+using CoinMarketCap.Helpers;
 
 namespace CoinMarketCap.Services
 {
@@ -20,15 +21,28 @@ namespace CoinMarketCap.Services
             _coinMarketCapRepository = coinMarketCapRepository;
         }
 
-        public async Task<ApiResponse> TransactionSimulationAsync(CoinSymbols coinSymbols, TransactionDto transactionDto, int userId, CancellationToken token = default)
+        public async Task<ApiResponse> TransactionSimulationAsync(CoinSymbols? coinSymbols, TransactionDto transactionDto, int userId, Lang lang, CancellationToken token = default)
         {
+            Comment comment = new(lang);
             ApiResponse apiResponse = new();
 
             apiResponse.Code = ApiErrorCodes.FailedCode;
 
             if(userId <= 0) 
             {
-                apiResponse.Comment = "id пользователя не валидно.";
+                apiResponse.Comment = comment.InvalidUserId;
+                return apiResponse;
+            }
+
+            if(coinSymbols == null)
+            {
+                apiResponse.Comment = comment.CoinNotSelected;
+                return apiResponse;
+            }
+
+            if(transactionDto.Amount <= 0)
+            {
+                apiResponse.Comment = comment.AmountNotConfirmed;
                 return apiResponse;
             }
 
@@ -36,7 +50,7 @@ namespace CoinMarketCap.Services
             
             if (metaData == null) 
             {
-                apiResponse.Comment = "Не удалось найти валюту";
+                apiResponse.Comment = comment.CoinNotFound;
                 return apiResponse;
             }
 
@@ -44,7 +58,7 @@ namespace CoinMarketCap.Services
 
             if (cryptocurrencyPrice <= 0)
             {
-                apiResponse.Comment = "Данные по валюте не найдены.";
+                apiResponse.Comment = comment.CoinDataNotFound;
                 return apiResponse;
             }
 
@@ -57,12 +71,12 @@ namespace CoinMarketCap.Services
 
             if(result <= 0)
             {
-                apiResponse.Comment = "транзакция не выполнена.";
+                apiResponse.Comment = comment.TransactionFailed;
                 return apiResponse;
             }
 
             apiResponse.Code = ApiErrorCodes.SuccessCode;
-            apiResponse.Comment = "успешно";
+            apiResponse.Comment = comment.Success;
             return apiResponse;
         }
 

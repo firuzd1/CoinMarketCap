@@ -1,5 +1,6 @@
 ﻿using CoinMarketCap.Dtos;
 using CoinMarketCap.Models;
+using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -21,10 +22,10 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ApiResponse> GetTokenAsync([FromBody] UserLoginDto userLogin)
+        public async Task<ApiResponse> GetTokenAsync(Lang lang, [FromBody] UserLoginDto userLogin, CancellationToken token = default)
         {
             ApiResponse _response = new();
-            _response = await _identityService.GenerationToken(userLogin);
+            _response = await _identityService.GenerationToken(lang, userLogin);
             return _response;
 
         }

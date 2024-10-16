@@ -35,11 +35,11 @@ namespace CoinMarketCap.Services
             _userValidator = userValidator;
         }
 
-        public async Task<ApiResponse> GenerationToken(UserLoginDto loginDto, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> GenerationToken(Lang lang, UserLoginDto loginDto, CancellationToken cancellationToken = default)
         {
             ApiResponse _response = new();
             _response.Params = new List<Param>();
-            Comment comment = new();
+            Comment comment = new(lang);
 
             JwtSettingsModel jwtSettings = new JwtSettingsModel
             {
@@ -67,7 +67,7 @@ namespace CoinMarketCap.Services
             if (user is null)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = "InvalidLoginOrPassword";
+                _response.Comment = comment.InvalidLoginOrPassword;
                 return _response;
             }
 
@@ -92,7 +92,7 @@ namespace CoinMarketCap.Services
             string jwtToken = tokenHandler.WriteToken(token);
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = "Успешно.";
+            _response.Comment = comment.Success;
             _response.Params.Add(new Param { Name = "Token", Value = jwtToken });
 
             return _response;

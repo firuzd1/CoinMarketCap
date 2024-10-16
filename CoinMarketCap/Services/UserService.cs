@@ -22,7 +22,7 @@ namespace CoinMarketCap.Services
             _userValidatorFl = userValidatorFl;
         }
 
-        public async Task<ApiResponse> CreateUserAsync(UserDto userDto, CancellationToken token = default)
+        public async Task<ApiResponse> CreateUserAsync(Lang lang, UserDto userDto, CancellationToken token = default)
         {
 
             ApiResponse _response = new();
@@ -30,7 +30,7 @@ namespace CoinMarketCap.Services
             var validationResult = await _userValidatorFl.ValidateAsync(userDto, o =>
                 o.IncludeRuleSets("Create").ThrowOnFailures(), token);
 
-            var comment = new Comment();
+            var comment = new Comment(lang);
 
             var user = userDto.UserDtoToUserModel();
             user.Password = _functionsHelper.GetSHA1String(user.Password);
@@ -38,13 +38,13 @@ namespace CoinMarketCap.Services
             int userId = await _repository.CreateUserAsync(user, token);
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = "Успешно.";
+            _response.Comment = comment.Success;
             _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
 
             if (userId <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = "Попробуйте позже.";
+                _response.Comment = comment.PleaseTryLaiter;
             }
             return _response;
         }

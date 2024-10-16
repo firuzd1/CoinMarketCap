@@ -1,5 +1,6 @@
 ﻿using CoinMarketCap.Dtos;
 using CoinMarketCap.Models;
+using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpPost("create-user")]
-        public async Task<ApiResponse> CreateUserAsync([FromBody] UserDto user)
-            => await _userService.CreateUserAsync(user);
+        public async Task<ApiResponse> CreateUserAsync(Lang lang, [FromBody] UserDto user, CancellationToken token = default)
+            => await _userService.CreateUserAsync(lang, user, token);
     }
 }
