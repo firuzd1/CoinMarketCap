@@ -20,11 +20,11 @@ namespace CoinMarketCap.Controllers
 
         [HttpPost("simulate_transaction")]
         [Authorize]
-        public async Task<ApiResponse> TransactionSimulationAsync(Lang lang, CoinSymbols? coinSymbol, TransactionDto transactionDto, CancellationToken token = default)
+        public async Task<ApiResponse> TransactionSimulationAsync(CoinSymbols? coinSymbol, TransactionDto transactionDto, CancellationToken token = default)
         {
             int UserId = int.Parse(HttpContext.User.FindFirstValue("UserId"));
 
-            return await _transactionService.TransactionSimulationAsync(coinSymbol, transactionDto, UserId, lang, token);
+            return await _transactionService.TransactionSimulationAsync(coinSymbol, transactionDto, UserId, token);
         }
 
         [HttpGet("check-account_balance")]

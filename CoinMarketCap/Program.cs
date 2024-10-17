@@ -83,6 +83,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 //Other
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<FunctionsHelper>();
+builder.Services.AddScoped<Comment>();
 
 
 
@@ -166,6 +167,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
+app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseAuthorization();

@@ -18,7 +18,7 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpPost("create-user")]
-        public async Task<ApiResponse> CreateUserAsync(Lang lang, [FromBody] UserDto user, CancellationToken token = default)
-            => await _userService.CreateUserAsync(lang, user, token);
+        public async Task<ApiResponse> CreateUserAsync([FromBody] UserDto user, CancellationToken token = default)
+            => await _userService.CreateUserAsync(user, token);
     }
 }

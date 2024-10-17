@@ -22,10 +22,10 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ApiResponse> GetTokenAsync(Lang lang, [FromBody] UserLoginDto userLogin, CancellationToken token = default)
+        public async Task<ApiResponse> GetTokenAsync([FromBody] UserLoginDto userLogin, CancellationToken token = default)
         {
             ApiResponse _response = new();
-            _response = await _identityService.GenerationToken(lang, userLogin);
+            _response = await _identityService.GenerationToken(userLogin);
             return _response;
 
         }

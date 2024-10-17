@@ -22,24 +22,27 @@ namespace CoinMarketCap.Services
         private FunctionsHelper _functionsHelper;
         private readonly IOptions<JwtSettingsModel> _options;
         private UserValidator _userValidator;
+        private readonly Comment _comment;
 
         public IdentityService(
         UserRepository userRepository,
             IOptions<JwtSettingsModel> options,
             FunctionsHelper functionsHelper,
-            UserValidator userValidator)
+            UserValidator userValidator,
+            Comment comment)
         {
             _userRepository = userRepository;
             _options = options;
             _functionsHelper = functionsHelper;
             _userValidator = userValidator;
+            _comment = comment;
         }
 
-        public async Task<ApiResponse> GenerationToken(Lang lang, UserLoginDto loginDto, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> GenerationToken(UserLoginDto loginDto, CancellationToken cancellationToken = default)
         {
             ApiResponse _response = new();
             _response.Params = new List<Param>();
-            Comment comment = new(lang);
+           
 
             JwtSettingsModel jwtSettings = new JwtSettingsModel
             {
@@ -50,7 +53,7 @@ namespace CoinMarketCap.Services
             };
             var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
 
-            ApiResponse validationResponse = _userValidator.ValidateLoginModel(loginDto, comment);
+            ApiResponse validationResponse = _userValidator.ValidateLoginModel(loginDto, _comment);
 
 
             if (validationResponse.Code == ApiErrorCodes.FailedCode)
@@ -67,7 +70,7 @@ namespace CoinMarketCap.Services
             if (user is null)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = comment.InvalidLoginOrPassword;
+                _response.Comment = _comment.InvalidLoginOrPassword;
                 return _response;
             }
 
@@ -78,6 +81,7 @@ namespace CoinMarketCap.Services
             {
                 new ("UserId", user.Id.ToString()),
                 new ("Login", user.Login),
+                new("Lang", user.Lang.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -92,7 +96,7 @@ namespace CoinMarketCap.Services
             string jwtToken = tokenHandler.WriteToken(token);
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = comment.Success;
+            _response.Comment = _comment.Success;
             _response.Params.Add(new Param { Name = "Token", Value = jwtToken });
 
             return _response;

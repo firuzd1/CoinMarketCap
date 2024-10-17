@@ -14,16 +14,17 @@ namespace CoinMarketCap.Services
     {
         private CoinMarketCapProvider _provider;
         private CoinMarketCapRepository _repository;
+        private Comment _comment;
         private readonly int ItemsOfPage = 20;
-        public CoinMarketCapService(CoinMarketCapProvider provider, CoinMarketCapRepository repository)
+        public CoinMarketCapService(CoinMarketCapProvider provider, CoinMarketCapRepository repository, Comment comment)
         {
             _repository = repository;
             _provider = provider;
+            _comment = comment;
         }
 
-        public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(Lang lang, CancellationToken token = default)
+        public async Task<ApiResponse> UpdateCryptocurrencyQuoteBaseAsync(CancellationToken token = default)
         {
-            Comment comment = new(lang);
             ApiResponse _response = new();
             _response.Code = ApiErrorCodes.FailedCode;
 
@@ -35,12 +36,12 @@ namespace CoinMarketCap.Services
             
             if(result <= 0) 
             {
-                _response.Comment = comment.FailedRecordToDb;
+                _response.Comment = _comment.FailedRecordToDb;
                 return _response;
             }
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = comment.Success;
+            _response.Comment = _comment.Success;
             return _response;
         }
 

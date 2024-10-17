@@ -27,18 +27,32 @@ namespace CoinMarketCap.Helpers
         //UserValidator
         public string InvalidLogin = string.Empty;
         public string InvalidPassword = string.Empty;
+        public string InvalidRegisLogin = string.Empty;
+        public string InvalidRegisPassword = string.Empty;
 
 
 
-        public Comment(Lang LNG = Lang.RU)
+        public Comment()
         {
-            if (LNG == Lang.TJ)
-                _configuration = new ConfigurationBuilder().AddJsonFile("Language/tj.json").Build();
+            string lang = Thread.CurrentThread.CurrentCulture.Name.ToUpperInvariant();
 
-            else if(LNG == Lang.RU)
+            if (string.IsNullOrEmpty(lang))
+                lang = Lang.RU.ToString();
+
+            lang = lang.Substring(0, 2);
+
+            if (string.Equals(lang, Lang.RU.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
                 _configuration = new ConfigurationBuilder().AddJsonFile("Language/ru.json").Build();
-            else
+            }
+            else if (string.Equals(lang, Lang.TJ.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                _configuration = new ConfigurationBuilder().AddJsonFile("Language/tj.json").Build();
+            }
+            else if (string.Equals(lang, Lang.EN.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
                 _configuration = new ConfigurationBuilder().AddJsonFile("Language/en.json").Build();
+            }
 
 
             Success = _configuration.GetSection("LNG")["Success"];
@@ -58,7 +72,37 @@ namespace CoinMarketCap.Helpers
 
             InvalidLogin = _configuration.GetSection("LNG")["InvalidLogin"];
             InvalidPassword = _configuration.GetSection("LNG")["InvalidPassword"];
+            InvalidRegisLogin = _configuration.GetSection("LNG")["InvalidRegisLogin"];
+            InvalidRegisPassword = _configuration.GetSection("LNG")["InvalidRegisPassword"];
 
         }
     }
 }
+
+
+
+
+//{
+//    "LNG": {
+//        "Success": "Succes.",
+//    "Error": "Error.",
+//    "PleaseTryLater": "PleaseTryLater.",
+
+//    "InvalidUserId": "Invalid user id.",
+//    "CoinNotFound": "Coin not found.",
+//    "CoinDataNotFound": "Coin data not found.",
+//    "TransactionFailed": "Transaction failed.",
+//    "CoinNotSelected": "Coin not selected.",
+//    "AmountNotConfirmed": "Amount not confirmed.",
+
+//    "FailedRecordAtDb": "Failed to record at data base.",
+
+//    "InvalidLoginOrPassword": "Invalid login or password.",
+
+//    "InvalidLogin": "The login must contain only English letters and numbers, without spaces or special characters.",
+//    "InvalidPassword": "The password cannot be empty and must contain at least 5 characters.",
+//    "InvalidRegisLogin": "The login cannot be empty and cannot exceed 35 characters.",
+//    "InvalidRegisPassword": "The password must contain a minimum of 6 characters and a maximum of 10."
+  
+//  }
+//}

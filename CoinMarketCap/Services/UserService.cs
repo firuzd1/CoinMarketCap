@@ -13,16 +13,18 @@ namespace CoinMarketCap.Services
     {
         private UserRepository _repository;
         private FunctionsHelper _functionsHelper;
+        private readonly Comment _comment;
         private IValidator<UserDto> _userValidatorFl;
 
-        public UserService(UserRepository repository, FunctionsHelper functionsHelper, IValidator<UserDto> userValidatorFl)
+        public UserService(UserRepository repository, FunctionsHelper functionsHelper, IValidator<UserDto> userValidatorFl, Comment comment)
         {
             _repository = repository;
             _functionsHelper = functionsHelper;
             _userValidatorFl = userValidatorFl;
+            _comment = comment;
         }
 
-        public async Task<ApiResponse> CreateUserAsync(Lang lang, UserDto userDto, CancellationToken token = default)
+        public async Task<ApiResponse> CreateUserAsync(UserDto userDto, CancellationToken token = default)
         {
 
             ApiResponse _response = new();
@@ -30,21 +32,19 @@ namespace CoinMarketCap.Services
             var validationResult = await _userValidatorFl.ValidateAsync(userDto, o =>
                 o.IncludeRuleSets("Create").ThrowOnFailures(), token);
 
-            var comment = new Comment(lang);
-
             var user = userDto.UserDtoToUserModel();
             user.Password = _functionsHelper.GetSHA1String(user.Password);
 
             int userId = await _repository.CreateUserAsync(user, token);
 
             _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = comment.Success;
+            _response.Comment = _comment.Success;
             _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
 
             if (userId <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = comment.PleaseTryLaiter;
+                _response.Comment = _comment.PleaseTryLaiter;
             }
             return _response;
         }

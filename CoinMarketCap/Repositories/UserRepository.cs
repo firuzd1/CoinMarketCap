@@ -33,7 +33,7 @@ namespace CoinMarketCap.Repositories
 
             using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
-            string query = @"SELECT id AS Id, login as Login, password AS Password
+            string query = @"SELECT id AS Id, login as Login, password AS Password, lang AS Lang
                             FROM ""user""
                             WHERE login = @Login AND password = @Password";
 

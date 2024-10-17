@@ -23,13 +23,13 @@ namespace CoinMarketCap.Validators
 
             if (!_allowedLoginRegex.IsMatch(loginDto.Login))
             {
-                _response.Comment = "Invalid login.";
+                _response.Comment = comment.InvalidLogin;
                 return _response;
             }
 
             if (string.IsNullOrEmpty(loginDto.Password) || loginDto.Password.Length < 5)
             {
-                _response.Comment = "Invalid password.";
+                _response.Comment = comment.InvalidPassword;
                 return _response;
             }
 

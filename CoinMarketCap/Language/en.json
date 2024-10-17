@@ -1,22 +1,24 @@
 ﻿{
   "LNG": {
-    "Success": "Успешно.",
-    "Error": "Ошибка.",
-    "PleaseTryLater": "Повторите позже.",
+    "Success": "Succes.",
+    "Error": "Error.",
+    "PleaseTryLater": "PleaseTryLater.",
 
-    "InvalidUserId": "ID пользователя не валиден.",
-    "CoinNotFound": "Не удалось найти валюту.",
-    "CoinDataNotFound": "Данные по валюте не найдены.",
-    "TransactionFailed": "Транзакция не выполнена.",
-    "CoinNotSelected": "вылюта не выбрана.",
-    "AmountNotConfirmed": "не выбрана количество монет.",
+    "InvalidUserId": "Invalid user id.",
+    "CoinNotFound": "Coin not found.",
+    "CoinDataNotFound": "Coin data not found.",
+    "TransactionFailed": "Transaction failed.",
+    "CoinNotSelected": "Coin not selected.",
+    "AmountNotConfirmed": "Amount not confirmed.",
 
-    "FailedRecordAtDb": "Не удалось добавить запись в базу данных.",
+    "FailedRecordAtDb": "Failed to record at data base.",
 
-    "InvalidLoginOrPassword": "Неверный логин или пароль.",
+    "InvalidLoginOrPassword": "Invalid login or password.",
 
-    "InvalidLogin": "Логин должен содержать только буквы английского алфавита и цифры, без пробелов и специальных символов.",
-    "InvalidPassword": "Пароль не может быть пустым и должен содержать не менее 5 символов."
+    "InvalidLogin": "The login must contain only English letters and numbers, without spaces or special characters.",
+    "InvalidPassword": "The password cannot be empty and must contain at least 5 characters.",
+    "InvalidRegisLogin": "The login cannot be empty and cannot exceed 35 characters.",
+    "InvalidRegisPassword": "The password must contain a minimum of 6 characters and a maximum of 10."
 
   }
 }

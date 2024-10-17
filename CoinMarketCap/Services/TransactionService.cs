@@ -13,36 +13,37 @@ namespace CoinMarketCap.Services
     {
         private TransactionRepository _transactionRepository;
         private CoinMarketCapRepository _coinMarketCapRepository;
+        private readonly Comment _comment;
         private readonly int pageSize = 10;
 
-        public TransactionService(TransactionRepository transactionRepository, CoinMarketCapRepository coinMarketCapRepository)
+        public TransactionService(TransactionRepository transactionRepository, CoinMarketCapRepository coinMarketCapRepository, Comment comment)
         {
             _transactionRepository = transactionRepository;
             _coinMarketCapRepository = coinMarketCapRepository;
+            _comment = comment;
         }
 
-        public async Task<ApiResponse> TransactionSimulationAsync(CoinSymbols? coinSymbols, TransactionDto transactionDto, int userId, Lang lang, CancellationToken token = default)
+        public async Task<ApiResponse> TransactionSimulationAsync(CoinSymbols? coinSymbols, TransactionDto transactionDto, int userId, CancellationToken token = default)
         {
-            Comment comment = new(lang);
             ApiResponse apiResponse = new();
 
             apiResponse.Code = ApiErrorCodes.FailedCode;
 
             if(userId <= 0) 
             {
-                apiResponse.Comment = comment.InvalidUserId;
+                apiResponse.Comment = _comment.InvalidUserId;
                 return apiResponse;
             }
 
             if(coinSymbols == null)
             {
-                apiResponse.Comment = comment.CoinNotSelected;
+                apiResponse.Comment = _comment.CoinNotSelected;
                 return apiResponse;
             }
 
             if(transactionDto.Amount <= 0)
             {
-                apiResponse.Comment = comment.AmountNotConfirmed;
+                apiResponse.Comment = _comment.AmountNotConfirmed;
                 return apiResponse;
             }
 
@@ -50,7 +51,7 @@ namespace CoinMarketCap.Services
             
             if (metaData == null) 
             {
-                apiResponse.Comment = comment.CoinNotFound;
+                apiResponse.Comment = _comment.CoinNotFound;
                 return apiResponse;
             }
 
@@ -58,7 +59,7 @@ namespace CoinMarketCap.Services
 
             if (cryptocurrencyPrice <= 0)
             {
-                apiResponse.Comment = comment.CoinDataNotFound;
+                apiResponse.Comment = _comment.CoinDataNotFound;
                 return apiResponse;
             }
 
@@ -71,12 +72,12 @@ namespace CoinMarketCap.Services
 
             if(result <= 0)
             {
-                apiResponse.Comment = comment.TransactionFailed;
+                apiResponse.Comment = _comment.TransactionFailed;
                 return apiResponse;
             }
 
             apiResponse.Code = ApiErrorCodes.SuccessCode;
-            apiResponse.Comment = comment.Success;
+            apiResponse.Comment = _comment.Success;
             return apiResponse;
         }
 
