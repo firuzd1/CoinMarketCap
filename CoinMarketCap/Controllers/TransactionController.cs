@@ -28,6 +28,7 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpGet("check-account_balance")]
+        [Authorize]
         public async Task<BalanceResponse> CheckBalanceAsync(string? search, int page = 1, CancellationToken token = default)
         {
             int userId = int.Parse(HttpContext.User.FindFirstValue("UserId"));

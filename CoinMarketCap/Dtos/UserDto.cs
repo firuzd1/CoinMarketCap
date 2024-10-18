@@ -1,4 +1,6 @@
-﻿namespace CoinMarketCap.Dtos
+﻿using CoinMarketCap.Models.Enums;
+
+namespace CoinMarketCap.Dtos
 {
     public class UserDto
     {

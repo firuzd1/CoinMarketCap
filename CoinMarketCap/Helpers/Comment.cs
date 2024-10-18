@@ -103,6 +103,61 @@ namespace CoinMarketCap.Helpers
 //    "InvalidPassword": "The password cannot be empty and must contain at least 5 characters.",
 //    "InvalidRegisLogin": "The login cannot be empty and cannot exceed 35 characters.",
 //    "InvalidRegisPassword": "The password must contain a minimum of 6 characters and a maximum of 10."
-  
+
 //  }
+//}
+
+
+
+
+//{
+//    "LNG": {
+//        "Success": "бомуваффакият.",
+//    "Error": "Хатогӣ.",
+//    "PleaseTryLater": "Лутфан, баъдтар бори дигар кӯшиш кунед.",
+
+//    "InvalidUserId": "ID корбар эътибор надорад.",
+//    "CoinNotFound": "Валюта ёфт нашуд.",
+//    "CoinDataNotFound": "Маълумот оид ба асъор ёфт нашуд.",
+//    "TransactionFailed": "Амалиёт муваффақ нашуд.",
+//    "CoinNotSelected": "ягон асъор интихоб нашудааст.",
+//    "AmountNotConfirmed": "шумораи тангаҳо интихоб нашудааст.",
+
+
+//    "FailedRecordAtDb": "Илова кардани сабт ба пойгоҳи додаҳо муяссар нашуд.",
+
+//    "InvalidLoginOrPassword": "Логин ё рамзи нодуруст.",
+
+//    "InvalidLogin": "Логин бояд танҳо ҳарфҳо ва рақамҳои англисӣ дошта бошад, бидуни фосила ё аломатҳои махсус.",
+//    "InvalidPassword": "Рамз холӣ буда наметавонад ва бояд ҳадди аққал 5 аломат дошта бошад.",
+//    "InvalidRegisLogin": "Логин холӣ буда наметавонад ва набояд аз 35 аломат зиёд бошад.",
+//    "InvalidRegisPassword": "Парол бояд ҳадди аққал 6 аломат ва ҳадди аксар 10 аломат дошта бошад."
+//    }
+//}
+
+
+
+//{
+//    "LNG": {
+//        "Success": "Успешно.",
+//    "Error": "Ошибка.",
+//    "PleaseTryLater": "Повторите позже.",
+
+//    "InvalidUserId": "ID пользователя не валиден.",
+//    "CoinNotFound": "Не удалось найти валюту.",
+//    "CoinDataNotFound": "Данные по валюте не найдены.",
+//    "TransactionFailed": "Транзакция не выполнена.",
+//    "CoinNotSelected": "вылюта не выбрана.",
+//    "AmountNotConfirmed": "не выбрана количество монет.",
+
+
+//    "FailedRecordAtDb": "Не удалось добавить запись в базу данных.",
+
+//    "InvalidLoginOrPassword": "Неверный логин или пароль.",
+
+//    "InvalidLogin": "Логин должен содержать только буквы английского алфавита и цифры, без пробелов и специальных символов.",
+//    "InvalidPassword": "Пароль не может быть пустым и должен содержать не менее 5 символов.",
+//    "InvalidRegisLogin": "Логин не сожет быть пустым и не превышать 35 символов.",
+//    "InvalidRegisPassword": "Пароль должен содержать минимум 6 символов и максимум 10."
+//    }
 //}

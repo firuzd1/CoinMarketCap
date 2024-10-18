@@ -2,7 +2,9 @@
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CoinMarketCap.Controllers
 {
@@ -18,7 +20,24 @@ namespace CoinMarketCap.Controllers
         }
 
         [HttpPost("create-user")]
-        public async Task<ApiResponse> CreateUserAsync([FromBody] UserDto user, CancellationToken token = default)
-            => await _userService.CreateUserAsync(user, token);
+        [Authorize]
+        public async Task<ApiResponse> CreateUserAsync(Lang lang, [FromBody] UserDto user, CancellationToken token = default)
+            => await _userService.CreateUserAsync(lang, user, token);
+
+        [HttpPut("update-user")]
+        [Authorize]
+        public async Task<ApiResponse> UpdateUserAsync(Lang lang, UserDto userDto, CancellationToken token = default)
+        {
+            int userId = int.Parse(HttpContext.User.FindFirstValue("UserId"));
+            return await _userService.UpdateUserAsync(userId, lang, userDto, token);
+        }
+
+        [HttpPut("update-language")]
+        [Authorize]
+        public async Task<ApiResponse> ChangeLanguageAsync(Lang lang, CancellationToken token = default)
+        {
+            int userId = int.Parse(HttpContext.User.FindFirstValue("UserId"));
+            return await _userService.ChangeLanguageAsync(userId, lang, token);
+        }
     }
 }

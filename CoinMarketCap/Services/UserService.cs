@@ -24,7 +24,7 @@ namespace CoinMarketCap.Services
             _comment = comment;
         }
 
-        public async Task<ApiResponse> CreateUserAsync(UserDto userDto, CancellationToken token = default)
+        public async Task<ApiResponse> CreateUserAsync(Lang lang, UserDto userDto, CancellationToken token = default)
         {
 
             ApiResponse _response = new();
@@ -32,20 +32,85 @@ namespace CoinMarketCap.Services
             var validationResult = await _userValidatorFl.ValidateAsync(userDto, o =>
                 o.IncludeRuleSets("Create").ThrowOnFailures(), token);
 
-            var user = userDto.UserDtoToUserModel();
+            var user = userDto.UserDtoToUserModel(lang);
             user.Password = _functionsHelper.GetSHA1String(user.Password);
 
             int userId = await _repository.CreateUserAsync(user, token);
-
-            _response.Code = ApiErrorCodes.SuccessCode;
-            _response.Comment = _comment.Success;
-            _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
 
             if (userId <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
                 _response.Comment = _comment.PleaseTryLaiter;
+                return _response;
             }
+
+            _response.Code = ApiErrorCodes.SuccessCode;
+            _response.Comment = _comment.Success;
+            _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
+
+            return _response;
+        }
+
+        public async Task<ApiResponse> UpdateUserAsync(int userId, Lang lang, UserDto userDto, CancellationToken token = default)
+        {
+            ApiResponse _response = new();
+            _response.Params = new List<Param>();
+
+            if(userId <= 0)
+            {
+                _response.Code = ApiErrorCodes.FailedCode;
+                _response.Comment = _comment.InvalidUserId;
+                return _response;
+
+            }
+
+            var validationResult = await _userValidatorFl.ValidateAsync(userDto, o =>
+                o.IncludeRuleSets("Create").ThrowOnFailures(), token);
+
+            var user = userDto.UpdateUserDtoToUserModel(userId, lang);
+            user.Password = _functionsHelper.GetSHA1String(user.Password);
+
+            int reposResponse = await _repository.UpdateUserAsync(user, token);
+
+            if (reposResponse <= 0)
+            {
+                _response.Code = ApiErrorCodes.FailedCode;
+                _response.Comment = _comment.PleaseTryLaiter;
+                return _response;
+            }
+
+            _response.Code = ApiErrorCodes.SuccessCode;
+            _response.Comment = _comment.Success;
+            _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
+
+            return _response;
+        }
+
+        public async Task<ApiResponse> ChangeLanguageAsync(int userId, Lang lang, CancellationToken token)
+        {
+            ApiResponse _response = new();
+            _response.Params = new List<Param>();
+
+            if (userId <= 0)
+            {
+                _response.Code = ApiErrorCodes.FailedCode;
+                _response.Comment = _comment.InvalidUserId;
+                return _response;
+            }
+
+            int reposResponese = await _repository.ChangeLanguageAsync(lang, userId, token);
+
+            if (reposResponese <= 0)
+            {
+                _response.Code = ApiErrorCodes.FailedCode;
+                _response.Comment = _comment.PleaseTryLaiter;
+                return _response;
+            }
+
+            _response.Code = ApiErrorCodes.SuccessCode;
+            _response.Comment = _comment.Success;
+            _response.Params.Add(new Param { Name = "UserId", Value = userId.ToString() });
+
             return _response;
         }
     }
