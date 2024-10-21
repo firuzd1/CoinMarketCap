@@ -35,7 +35,7 @@ namespace CoinMarketCap.Repositories
             return await conn.QueryFirstOrDefaultAsync<decimal>(new CommandDefinition(query, new { Symbol = symbol }, cancellationToken: token));
         }
 
-        public async Task<List<TransactionModel>> CheckBalanceAsync(int userId, string? search, int skip, int limit, CancellationToken token = default)
+        public async Task<List<TransactionModel>> GetTransactionAsync(int userId, string? search, int skip, int limit, CancellationToken token = default)
         {
             using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
@@ -68,6 +68,22 @@ namespace CoinMarketCap.Repositories
                             AND u.id = @UserId";
 
             return await conn.QueryFirstOrDefaultAsync<int>(new CommandDefinition( query, new { UserId = userId, Search = search },cancellationToken: token));
+        }
+
+        public async Task<decimal> CheckBalanceAsync(int userId, CancellationToken token = default)
+        {
+            using IDbConnection? conn = await _db.CreateConnectionAsync(token);
+
+            string query = @"SELECT SUM(ROUND((SELECT price 
+                                              FROM public.cryptocurrency 
+                                              WHERE symbol = md.symbol 
+                                              ORDER BY id DESC LIMIT 1) * tr.amount, 4)) AS TotalCurrentPrice
+                            FROM public.transactions AS tr
+                            JOIN public.user AS u ON u.id = tr.user_id
+                            JOIN public.crypto_metadata AS md ON md.id = tr.crypto_metadata_id
+                            WHERE u.id = @UserId;";
+
+            return await conn.QueryFirstOrDefaultAsync<decimal>(new CommandDefinition( query, new {userId = userId}, cancellationToken: token));
         }
     }
 }

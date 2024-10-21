@@ -67,7 +67,7 @@ namespace CoinMarketCap.Services
             return metaData;
         }
 
-        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, CancellationToken token = default)
+        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, string? search, CancellationToken token = default)
         {
             if (page > 1)
             {
@@ -77,7 +77,7 @@ namespace CoinMarketCap.Services
             {
                 page = 0;
             }
-            return await _repository.GetAllCryptocurrenciesAsync(page, ItemsOfPage, token);
+            return await _repository.GetAllCryptocurrenciesAsync(page, ItemsOfPage, search, token);
         }
     }
 }

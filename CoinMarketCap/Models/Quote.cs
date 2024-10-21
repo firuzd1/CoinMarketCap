@@ -43,5 +43,6 @@ namespace CoinMarketCap.Models
 
         [JsonPropertyName("fully_diluted_market_cap")]
         public decimal? FullyDilutedMarketCap { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

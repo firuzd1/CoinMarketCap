@@ -69,7 +69,7 @@ namespace CoinMarketCap.Repositories
             return response.Data.Count;
         }
 
-        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, int itemofPage, CancellationToken token = default)
+        public async Task<List<CryptocurrencyData>> GetAllCryptocurrenciesAsync(int page, int itemofPage, string? search, CancellationToken token = default)
         {
             using IDbConnection? conn = await _db.CreateConnectionAsync(token);
 
@@ -95,12 +95,14 @@ namespace CoinMarketCap.Repositories
                 percent_change_90d AS PercentChange90d, 
                 market_cap AS MarketCap, 
                 market_cap_dominance AS MarketCapDominance, 
-                fully_diluted_market_cap AS FullyDilutedMarketCap
+                fully_diluted_market_cap AS FullyDilutedMarketCap,
+                updated_date AS UpdatedDate
             FROM cryptocurrency
-                     OFFSET @Page LIMIT @ItemsOfPage";
+             WHERE (@Search IS NULL OR symbol LIKE ('%' || @Search || '%'))
+                      ORDER BY updated_date DESC OFFSET @Page LIMIT @ItemsOfPage";
 
             var cryptocurrencies = await conn.QueryAsync<CryptocurrencyData, QuoteUSD, CryptocurrencyData>(
-                new CommandDefinition(sql, new { Page = page, ItemsOfPage = itemofPage }, cancellationToken: token), 
+                new CommandDefinition(sql, new { Page = page, ItemsOfPage = itemofPage, Search = search }, cancellationToken: token), 
                 (crypto, quote) =>
                 {
                     crypto.Quote = new Quote { USD = quote };

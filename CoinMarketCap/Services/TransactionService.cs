@@ -89,12 +89,9 @@ namespace CoinMarketCap.Services
             int limit = pageSize;
             int skip = page == 1 ? 0 : (page - 1) * limit;
 
-            List<TransactionModel>? transactions = await _transactionRepository.CheckBalanceAsync(userId, search, skip, limit, token);
+            List<TransactionModel>? transactions = await _transactionRepository.GetTransactionAsync(userId, search, skip, limit, token);
 
-            foreach (TransactionModel transaction in transactions)
-            {
-                balance += transaction.CurrentPrice;
-            }
+            balance = await _transactionRepository.CheckBalanceAsync(userId, token);
 
             int transactionCount = await _transactionRepository.GetCTransactionCountAsync(search, userId, token);
 
