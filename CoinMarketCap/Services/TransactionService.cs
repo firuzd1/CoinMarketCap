@@ -6,17 +6,19 @@ using CoinMarketCap.Repositories;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Helpers;
+using CoinMarketCap.Interfaces.Services;
+using CoinMarketCap.Interfaces.Repositories;
 
 namespace CoinMarketCap.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
-        private TransactionRepository _transactionRepository;
-        private CoinMarketCapRepository _coinMarketCapRepository;
+        private ITransactionRepository _transactionRepository;
+        private ICoinMarketCapRepository _coinMarketCapRepository;
         private readonly Comment _comment;
         private readonly int pageSize = 10;
 
-        public TransactionService(TransactionRepository transactionRepository, CoinMarketCapRepository coinMarketCapRepository, Comment comment)
+        public TransactionService(ITransactionRepository transactionRepository, ICoinMarketCapRepository coinMarketCapRepository, Comment comment)
         {
             _transactionRepository = transactionRepository;
             _coinMarketCapRepository = coinMarketCapRepository;

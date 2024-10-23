@@ -13,19 +13,21 @@ using CoinMarketCap.Models.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CoinMarketCap.Interfaces.Services;
+using CoinMarketCap.Interfaces.Repositories;
 
 namespace CoinMarketCap.Services
 {
-    public class IdentityService
+    public class IdentityService : IIdentityService
     {
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
         private FunctionsHelper _functionsHelper;
         private readonly IOptions<JwtSettingsModel> _options;
         private UserValidator _userValidator;
         private readonly Comment _comment;
 
         public IdentityService(
-        UserRepository userRepository,
+        IUserRepository userRepository,
             IOptions<JwtSettingsModel> options,
             FunctionsHelper functionsHelper,
             UserValidator userValidator,

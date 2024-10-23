@@ -15,6 +15,9 @@ using CoinMarketCap.Dtos;
 using CoinMarketCap.Validators;
 using log4net.Config;
 using CoinMarketCap.Middlewares;
+using CoinMarketCap.Interfaces.Services;
+using CoinMarketCap.Interfaces.Providers;
+using CoinMarketCap.Interfaces.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,16 +60,16 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddControllers();
 
 //services
-builder.Services.AddScoped<CoinMarketCapProvider>();
-builder.Services.AddScoped<CoinMarketCapService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<IdentityService>();
-builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<ICoinMarketCapProvider, CoinMarketCapProvider>();
+builder.Services.AddScoped<ICoinMarketCapService, CoinMarketCapService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 //repositories
-builder.Services.AddScoped<CoinMarketCapRepository>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<TransactionRepository>();
+builder.Services.AddScoped<ICoinMarketCapRepository, CoinMarketCapRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 
 //DbConnection

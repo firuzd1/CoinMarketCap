@@ -1,4 +1,5 @@
 ﻿using CoinMarketCap.Dtos;
+using CoinMarketCap.Interfaces.Services;
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
@@ -13,8 +14,8 @@ namespace CoinMarketCap.Controllers
     [Route("api/v{version:ApiVersion}/users")]
     public class UserController : ControllerBase
     {
-        private UserService _userService;
-        public UserController(UserService userService)
+        private IUserService _userService;
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }

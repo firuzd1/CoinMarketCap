@@ -1,4 +1,5 @@
 ﻿using CoinMarketCap.Dtos;
+using CoinMarketCap.Interfaces.Services;
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
@@ -12,8 +13,8 @@ namespace CoinMarketCap.Controllers
     [Route("api/[controller]")]
     public class TransactionController : ControllerBase
     {
-        private TransactionService _transactionService;
-        public TransactionController(TransactionService transactionService)
+        private ITransactionService _transactionService;
+        public TransactionController(ITransactionService transactionService)
         {
             _transactionService = transactionService;
         }

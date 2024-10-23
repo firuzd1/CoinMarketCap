@@ -1,6 +1,8 @@
-﻿namespace CoinMarketCap.Providers
+﻿using CoinMarketCap.Interfaces.Providers;
+
+namespace CoinMarketCap.Providers
 {
-    public class CoinMarketCapProvider
+    public class CoinMarketCapProvider : ICoinMarketCapProvider
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;

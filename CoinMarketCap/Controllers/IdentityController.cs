@@ -1,4 +1,5 @@
 ﻿using CoinMarketCap.Dtos;
+using CoinMarketCap.Interfaces.Services;
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
@@ -14,9 +15,9 @@ namespace CoinMarketCap.Controllers
     [Route("api/[controller]")]
     public class IdentityController : ControllerBase
     {
-        private IdentityService _identityService;
+        private IIdentityService _identityService;
 
-        public IdentityController(IdentityService identityService)
+        public IdentityController(IIdentityService identityService)
         {
             _identityService = identityService;
         }

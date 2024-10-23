@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinMarketCap", "CoinMarketCap\CoinMarketCap.csproj", "{3DB71D04-B0C6-4D18-8394-E4CA52F7FDD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinMarketCap.Tests", "CoinMarketCap.Tests\CoinMarketCap.Tests.csproj", "{298F2B9C-2D12-4F76-8A90-FCD82C5D79CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3DB71D04-B0C6-4D18-8394-E4CA52F7FDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DB71D04-B0C6-4D18-8394-E4CA52F7FDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DB71D04-B0C6-4D18-8394-E4CA52F7FDD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{298F2B9C-2D12-4F76-8A90-FCD82C5D79CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{298F2B9C-2D12-4F76-8A90-FCD82C5D79CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{298F2B9C-2D12-4F76-8A90-FCD82C5D79CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{298F2B9C-2D12-4F76-8A90-FCD82C5D79CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

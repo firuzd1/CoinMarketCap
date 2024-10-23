@@ -6,17 +6,19 @@ using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Models;
 using CoinMarketCap.Mappers;
 using FluentValidation;
+using CoinMarketCap.Interfaces.Services;
+using CoinMarketCap.Interfaces.Repositories;
 
 namespace CoinMarketCap.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private UserRepository _repository;
+        private IUserRepository _repository;
         private FunctionsHelper _functionsHelper;
         private readonly Comment _comment;
         private IValidator<UserDto> _userValidatorFl;
 
-        public UserService(UserRepository repository, FunctionsHelper functionsHelper, IValidator<UserDto> userValidatorFl, Comment comment)
+        public UserService(IUserRepository repository, FunctionsHelper functionsHelper, IValidator<UserDto> userValidatorFl, Comment comment)
         {
             _repository = repository;
             _functionsHelper = functionsHelper;

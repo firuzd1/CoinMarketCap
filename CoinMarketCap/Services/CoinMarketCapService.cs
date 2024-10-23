@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Builder.Extensions;
 using CoinMarketCap.Models.Enums;
 using System.Text.Json;
 using CoinMarketCap.Helpers;
+using CoinMarketCap.Interfaces.Services;
+using CoinMarketCap.Interfaces.Providers;
+using CoinMarketCap.Interfaces.Repositories;
 
 namespace CoinMarketCap.Services
 {
-    public class CoinMarketCapService
+    public class CoinMarketCapService : ICoinMarketCapService
     {
-        private CoinMarketCapProvider _provider;
-        private CoinMarketCapRepository _repository;
+        private ICoinMarketCapProvider _provider;
+        private ICoinMarketCapRepository _repository;
         private Comment _comment;
         private readonly int ItemsOfPage = 20;
-        public CoinMarketCapService(CoinMarketCapProvider provider, CoinMarketCapRepository repository, Comment comment)
+        public CoinMarketCapService(ICoinMarketCapProvider provider, ICoinMarketCapRepository repository, Comment comment)
         {
             _repository = repository;
             _provider = provider;

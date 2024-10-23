@@ -1,4 +1,5 @@
 using CoinMarketCap.Dtos;
+using CoinMarketCap.Interfaces.Services;
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using CoinMarketCap.Services;
@@ -12,9 +13,9 @@ namespace CoinMarketCap.Controllers
     [Route("api/v{version:ApiVersion}/CoinMarketCap")]
     public class CoinMarketCapController : ControllerBase
     {
-       private CoinMarketCapService _service;
+       private ICoinMarketCapService _service;
 
-        public CoinMarketCapController(CoinMarketCapService service)
+        public CoinMarketCapController(ICoinMarketCapService service)
         {
             _service = service;
         }

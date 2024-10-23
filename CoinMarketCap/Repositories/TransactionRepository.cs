@@ -1,11 +1,12 @@
 ﻿using CoinMarketCap.Interfaces;
+using CoinMarketCap.Interfaces.Repositories;
 using CoinMarketCap.Models;
 using Dapper;
 using System.Data;
 
 namespace CoinMarketCap.Repositories
 {
-    public class TransactionRepository
+    public class TransactionRepository : ITransactionRepository
     {
         private IDbConnectionFactory _db;
 

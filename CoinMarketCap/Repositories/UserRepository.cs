@@ -1,4 +1,5 @@
 ﻿using CoinMarketCap.Interfaces;
+using CoinMarketCap.Interfaces.Repositories;
 using CoinMarketCap.Models;
 using CoinMarketCap.Models.Enums;
 using Dapper;
@@ -6,7 +7,7 @@ using System.Data;
 
 namespace CoinMarketCap.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly IDbConnectionFactory _db;
         public UserRepository(IDbConnectionFactory db)

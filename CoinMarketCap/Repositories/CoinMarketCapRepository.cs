@@ -1,5 +1,6 @@
 ﻿using CoinMarketCap.Dtos;
 using CoinMarketCap.Interfaces;
+using CoinMarketCap.Interfaces.Repositories;
 using CoinMarketCap.Models;
 using Dapper;
 using Npgsql;
@@ -9,7 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CoinMarketCap.Repositories
 {
-    public class CoinMarketCapRepository
+    public class CoinMarketCapRepository : ICoinMarketCapRepository
     {
         private readonly IDbConnectionFactory _db;
         public CoinMarketCapRepository(IDbConnectionFactory db)
