@@ -115,5 +115,50 @@ namespace CoinMarketCap.Tests.Controllers
             Assert.Equal(expectedMetaData.Name, okResult.Name);
             // Проверьте другие необходимые поля...
         }
+
+
+        [Fact]
+        public async Task UpdateCryptocurrencyQuoteBaseAsync_ReturnsSuccessResponse()
+        {
+            // Arrange
+            var expectedResponse = new ApiResponse
+            {
+                Code = ApiErrorCodes.SuccessCode,
+                Comment = "Successfully updated."
+            };
+
+            _mockService.Setup(s => s.UpdateCryptocurrencyQuoteBaseAsync(It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(expectedResponse);
+
+            // Act
+            var result = await _controller.UpdateCryptocurrencyQuoteBaseAsync();
+
+            // Assert
+            var okResult = Assert.IsType<ApiResponse>(result);
+            Assert.Equal(expectedResponse.Code, okResult.Code);
+            Assert.Equal(expectedResponse.Comment, okResult.Comment);
+        }
+
+        [Fact]
+        public async Task UpdateCryptocurrencyQuoteBaseAsync_ReturnsFailedResponse_WhenNoRecordsAdded()
+        {
+            // Arrange
+            var expectedResponse = new ApiResponse
+            {
+                Code = ApiErrorCodes.FailedCode,
+                Comment = "Failed to add records to the database."
+            };
+
+            _mockService.Setup(s => s.UpdateCryptocurrencyQuoteBaseAsync(It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(expectedResponse);
+
+            // Act
+            var result = await _controller.UpdateCryptocurrencyQuoteBaseAsync();
+
+            // Assert
+            var failedResult = Assert.IsType<ApiResponse>(result);
+            Assert.Equal(expectedResponse.Code, failedResult.Code);
+            Assert.Equal(expectedResponse.Comment, failedResult.Comment);
+        }
     }
 }
