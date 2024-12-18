@@ -33,6 +33,12 @@ namespace CoinMarketCap.Services
 
             string stringResponse = await _provider.GetCryptocurrencyQuoteAsync(token);
 
+            if(stringResponse is null)
+            {
+                _response.Comment = _comment.PleaseTryLater;
+                return _response;
+            }
+
             CryptocurrencyResponse? response = JsonSerializer.Deserialize<CryptocurrencyResponse>(stringResponse);
 
             int result = await _repository.CryptocurrencyQuoteAddAsync(response, token);
@@ -57,6 +63,11 @@ namespace CoinMarketCap.Services
             if(metaData == null)
             {
                 string metadata = await _provider.GetMetadataAsync(symbol.ToString(), token);
+
+                if(metadata is null)
+                {
+                    return null;
+                }
 
                 CryptocurrencyMetaDataResponse? response = JsonSerializer.Deserialize<CryptocurrencyMetaDataResponse>(metadata);
                 int repResponse = await _repository.AddCryptoMetadataAsync(response, token);

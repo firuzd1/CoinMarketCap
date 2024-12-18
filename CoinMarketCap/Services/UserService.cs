@@ -42,7 +42,7 @@ namespace CoinMarketCap.Services
             if (userId <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = _comment.PleaseTryLaiter;
+                _response.Comment = _comment.PleaseTryLater;
                 return _response;
             }
 
@@ -77,7 +77,7 @@ namespace CoinMarketCap.Services
             if (reposResponse <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = _comment.PleaseTryLaiter;
+                _response.Comment = _comment.PleaseTryLater;
                 return _response;
             }
 
@@ -105,7 +105,7 @@ namespace CoinMarketCap.Services
             if (reposResponese <= 0)
             {
                 _response.Code = ApiErrorCodes.FailedCode;
-                _response.Comment = _comment.PleaseTryLaiter;
+                _response.Comment = _comment.PleaseTryLater;
                 return _response;
             }
 

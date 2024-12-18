@@ -8,7 +8,7 @@ namespace CoinMarketCap.Helpers
 
         public string Success = string.Empty;
         public string Error = string.Empty;
-        public string PleaseTryLaiter = string.Empty;
+        public string PleaseTryLater = string.Empty;
 
         //Transactions
         public string InvalidUserId = string.Empty;
@@ -57,7 +57,7 @@ namespace CoinMarketCap.Helpers
 
             Success = _configuration.GetSection("LNG")["Success"];
             Error = _configuration.GetSection("LNG")["Error"];
-            PleaseTryLaiter = _configuration.GetSection("LNG")["PleaseTryLaiter"];
+            PleaseTryLater = _configuration.GetSection("LNG")["PleaseTryLater"];
 
             InvalidUserId = _configuration.GetSection("LNG")["InvalidUserId"];
             CoinNotFound = _configuration.GetSection("LNG")["CoinNotFound"];
